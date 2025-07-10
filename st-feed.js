@@ -11,20 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
       container.classList.add("substack-feed-grid");
 
-      data.items.slice(0, 6).forEach((item) => {
+      data.items.slice(0, 6).forEach((item, index) => {
         const imgMatch = item.description.match(/<img.*?src="(.*?)"/);
         const imgSrc = imgMatch ? imgMatch[1] : null;
 
         const card = document.createElement("div");
-        card.className = "substack-post";
+        card.className = "substack-post" + (index === 0 ? " featured" : "");
 
         card.innerHTML = `
           ${imgSrc ? `<div class="substack-post-image"><img src="${imgSrc}" alt=""></div>` : ""}
           <div class="substack-post-content">
             <h3 class="substack-post-title">${item.title}</h3>
             <small class="substack-post-date">${new Date(item.pubDate).toLocaleDateString()}</small>
-            <p class="substack-post-snippet">${item.description.replace(/(<([^>]+)>)/gi, "").split(" ").slice(0, 30).join(" ")}...</p>
-            <a href="${item.link}" target="_blank" class="substack-post-button">Read on Substack</a>
+            <p class="substack-post-snippet">${item.description.replace(/(<([^>]+)>)/gi, "").split(" ").slice(0, 70).join(" ")}...</p>
+            <a href="${item.link}" target="_blank" class="substack-post-button">Read more</a>
           </div>
         `;
 
