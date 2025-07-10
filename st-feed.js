@@ -24,19 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = document.createElement("div");
         card.className = "substack-post" + (index === 0 ? " featured" : "");
 
-        card.innerHTML = `
-          ${imgSrc ? `
-            <div class="substack-post-image-wrapper">
-              <img src="${imgSrc}" alt="" class="substack-post-image" />
-            </div>
-          ` : ""}
-          <div class="substack-post-content">
-            <h3 class="substack-post-title">${item.title}</h3>
-            <small class="substack-post-date">${new Date(item.pubDate).toLocaleDateString()}</small>
-            <p class="substack-post-snippet">${previewText}</p>
-            <a href="${item.link}" target="_blank" class="substack-post-button">Read more</a>
-          </div>
-        `;
+ card.innerHTML = `
+  ${imgSrc ? `
+    <div class="substack-post-image-wrapper">
+      <img src="${imgSrc}" alt="" class="substack-post-image" />
+    </div>
+  ` : ""}
+  <div class="substack-post-content">
+    <small class="substack-post-date">${new Date(item.pubDate).toLocaleDateString()}</small>
+    <h3 class="substack-post-title">${item.title}</h3>
+    <p class="substack-post-snippet">${previewText}</p>
+    <a href="${item.link}" target="_blank" class="substack-post-button">Read more</a>
+  </div>
+`;
 
         container.appendChild(card);
       });
