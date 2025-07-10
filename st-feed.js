@@ -9,32 +9,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const container = document.getElementById("substack-feed");
       if (!container) return;
 
-      container.innerHTML = "";
+      container.classList.add("substack-feed-grid");
 
-      data.items.slice(0, 5).forEach((item) => {
+      data.items.slice(0, 6).forEach((item) => {
         const imgMatch = item.description.match(/<img.*?src="(.*?)"/);
         const imgSrc = imgMatch ? imgMatch[1] : null;
 
-        const post = document.createElement("div");
-        post.style.borderBottom = "1px solid #ddd";
-        post.style.paddingBottom = "2em";
-        post.style.marginBottom = "2em";
-        post.style.display = "flex";
-        post.style.flexWrap = "wrap";
-        post.style.gap = "1em";
+        const card = document.createElement("div");
+        card.className = "substack-post";
 
-        post.innerHTML = `
-          ${imgSrc ? `<img src="${imgSrc}" alt="" style="width: 120px; height: auto; object-fit: cover;">` : ""}
-          <div style="flex: 1; min-width: 200px;">
-            <h3 style="margin: 0 0 .5em; font-size:1.25em;">
-              <a href="${item.link}" target="_blank" style="text-decoration:none;color:#2c3e50;">${item.title}</a>
-            </h3>
-            <small style="color:#7f8c8d">${new Date(item.pubDate).toLocaleDateString()}</small>
-            <p style="margin:0.5em 0;color:#444">${item.description.replace(/(<([^>]+)>)/gi, "").split(" ").slice(0, 30).join(" ")}...</p>
+        card.innerHTML = `
+          ${imgSrc ? `<div class="substack-post-image"><img src="${imgSrc}" alt=""></div>` : ""}
+          <div class="substack-post-content">
+            <h3 class="substack-post-title">${item.title}</h3>
+            <small class="substack-post-date">${new Date(item.pubDate).toLocaleDateString()}</small>
+            <p class="substack-post-snippet">${item.description.replace(/(<([^>]+)>)/gi, "").split(" ").slice(0, 30).join(" ")}...</p>
+            <a href="${item.link}" target="_blank" class="substack-post-button">Read on Substack</a>
           </div>
         `;
 
-        container.appendChild(post);
+        container.appendChild(card);
       });
     } catch (e) {
       console.error("Failed to load Substack feed", e);
