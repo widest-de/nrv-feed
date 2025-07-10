@@ -12,22 +12,24 @@ document.addEventListener("DOMContentLoaded", () => {
       container.classList.add("substack-feed-grid");
 
       data.items.slice(0, 6).forEach((item, index) => {
-        // Get image: prefer thumbnail, then fallback to first <img> in content
         let imgSrc = item.thumbnail;
         if (!imgSrc) {
           const imgMatch = item.content.match(/<img.*?src="(.*?)"/);
           imgSrc = imgMatch ? imgMatch[1] : null;
         }
 
-        // Strip HTML from content and truncate to ~120 words
         const plainText = item.content.replace(/(<([^>]+)>)/gi, "");
-        const previewText = plainText.split(" ").slice(0, 120).join(" ") + "...";
+        const previewText = plainText.split(" ").slice(0, 60).join(" ") + "...";
 
         const card = document.createElement("div");
         card.className = "substack-post" + (index === 0 ? " featured" : "");
 
         card.innerHTML = `
-          ${imgSrc ? `<div class="substack-post-image"><img src="${imgSrc}" alt=""></div>` : ""}
+          ${imgSrc ? `
+            <div class="substack-post-image-wrapper">
+              <img src="${imgSrc}" alt="" class="substack-post-image" />
+            </div>
+          ` : ""}
           <div class="substack-post-content">
             <h3 class="substack-post-title">${item.title}</h3>
             <small class="substack-post-date">${new Date(item.pubDate).toLocaleDateString()}</small>
