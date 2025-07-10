@@ -12,8 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
       container.classList.add("substack-feed-grid");
 
       data.items.slice(0, 6).forEach((item, index) => {
-        const imgMatch = item.description.match(/<img.*?src="(.*?)"/);
-        const imgSrc = imgMatch ? imgMatch[1] : null;
+        // Get image: prefer thumbnail, then fallback to first <img> in content
+        let imgSrc = item.thumbnail;
+        if (!imgSrc) {
+          const imgMatch = item.content.match(/<img.*?src="(.*?)"/);
+          imgSrc = imgMatch ? imgMatch[1] : null;
+        }
+
+        // Strip HTML from content and truncate to ~120 words
+        const plainText = item.content.replace(/(<([^>]+)>)/gi, "");
+        const previewText = plainText.split(" ").slice(0, 120).join(" ") + "...";
 
         const card = document.createElement("div");
         card.className = "substack-post" + (index === 0 ? " featured" : "");
@@ -23,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="substack-post-content">
             <h3 class="substack-post-title">${item.title}</h3>
             <small class="substack-post-date">${new Date(item.pubDate).toLocaleDateString()}</small>
-            <p class="substack-post-snippet">${item.description.replace(/(<([^>]+)>)/gi, "").split(" ").slice(0, 70).join(" ")}...</p>
+            <p class="substack-post-snippet">${previewText}</p>
             <a href="${item.link}" target="_blank" class="substack-post-button">Read more</a>
           </div>
         `;
